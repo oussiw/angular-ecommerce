@@ -30,7 +30,7 @@ export class ProductService {
                          categoryId: number): Observable<GetResponseProducts> {
 
     const searchUrl = `${this.baseProductUrl}/search/findByCategoryId?id=${categoryId}`
-                        + `&page=${thePage}&size=${thePageSize}`;
+      + `&page=${thePage}&size=${thePageSize}`;
 
     return this.httpClient.get<GetResponseProducts>(searchUrl);
   }
@@ -52,7 +52,7 @@ export class ProductService {
                          keyword: string): Observable<GetResponseProducts> {
 
     const searchUrl = `${this.baseProductUrl}/search/findByNameContaining?name=${keyword}`
-                       + `&page=${thePage}&size=${thePageSize}`;
+      + `&page=${thePage}&size=${thePageSize}`;
 
     return this.httpClient.get<GetResponseProducts>(searchUrl);
   }

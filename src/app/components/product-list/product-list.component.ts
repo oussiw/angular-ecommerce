@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {ProductService} from '../../services/product.service';
 import {Product} from '../../common/product';
 import {ActivatedRoute} from '@angular/router';
+import {CartItem} from '../../common/cart-item';
+import {CartService} from '../../services/cart.service';
 
 @Component({
   selector: 'app-product-list',
@@ -22,7 +24,9 @@ export class ProductListComponent implements OnInit {
   theTotalElements: number = 0;
 
   previousKeyword: string = null;
+
   constructor(private productService: ProductService,
+              private cartService: CartService,
               private route: ActivatedRoute) {
   }
 
@@ -67,7 +71,7 @@ export class ProductListComponent implements OnInit {
     console.log(`currentId= ${this.currentCategoryId} / previousId= ${this.previousCategoryId} / thePageNumber= ${this.thePageNumber}`);
 
     this.productService.getProductListPaginate(this.thePageNumber - 1, this.thePageSize, this.currentCategoryId)
-                        .subscribe(this.processResult());
+      .subscribe(this.processResult());
   }
 
   private processResult(): (data) => void {
@@ -83,7 +87,7 @@ export class ProductListComponent implements OnInit {
     const keyword = this.route.snapshot.paramMap.get('keyword');
 
     // If we have a different keyword than the previous then set thePageNumber back to 1
-    if (this.previousKeyword !== keyword ){
+    if (this.previousKeyword !== keyword) {
       this.thePageNumber = 1;
     }
     this.previousKeyword = keyword;
@@ -91,9 +95,17 @@ export class ProductListComponent implements OnInit {
     this.productService.searchProductsPaginate(this.thePageNumber - 1, this.thePageSize, keyword).subscribe(this.processResult());
   }
 
-  updatePageSize(pageSize: number): void{
+  updatePageSize(pageSize: number): void {
     this.thePageSize = pageSize;
     this.thePageNumber = 1;
     this.listProduct();
+  }
+
+  addToCart(theProduct: Product): void {
+    console.log(`Adding to cart: ${theProduct.name}, ${theProduct.unitPrice}`);
+    //
+    //
+    const theCartItem = new CartItem(theProduct);
+    this.cartService.addToCart(theCartItem);
   }
 }
