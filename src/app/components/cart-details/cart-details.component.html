@@ -54,7 +54,7 @@
             <td colspan="2"></td>
             <td style="font-weight: bold">
               <p>Total quantity: {{totalQuantity}}</p>
-              <p>Total price: {{totalPrice}}</p>
+              <p>Total price: {{totalPrice | currency: 'USD'}}</p>
               <a routerLink="/checkout" class="btn btn-primary">Checkout</a>
             </td>
           </tr>
