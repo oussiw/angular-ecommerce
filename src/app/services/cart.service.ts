@@ -41,7 +41,7 @@ export class CartService {
     this.computeCartTotals();
   }
 
-  private computeCartTotals(): void {
+  computeCartTotals(): void {
     let totalPriceValue: number = 0;
     let totalQuantityValue: number = 0;
 
@@ -57,13 +57,35 @@ export class CartService {
     this.logCartData(totalPriceValue, totalQuantityValue);
   }
 
-  private logCartData(totalPriceValue: number, totalQuantityValue: number) {
+  private logCartData(totalPriceValue: number, totalQuantityValue: number): void {
     console.log('Content of the cart');
     for (let cartItem of this.cartItems) {
       const subTotalPrice = cartItem.quantity * cartItem.unitPrice;
-      console.log(`name: ${cartItem.name}, quantity: ${cartItem.quantity}, unitPrice: ${cartItem.unitPrice},subTotalPrice: ${subTotalPrice}`);
+      console.log(`name: ${cartItem.name}, quantity: ${cartItem.quantity}, `
+        + `unitPrice: ${cartItem.unitPrice},subTotalPrice: ${subTotalPrice}`);
     }
     console.log(`Total price: ${totalPriceValue.toFixed(2)}, Total quantity: ${totalQuantityValue}`);
     console.log('-----------');
+  }
+
+  decrementQuantity(cartItem: CartItem): void{
+    cartItem.quantity --;
+
+    if (cartItem.quantity === 0){
+      this.remove(cartItem);
+    }
+    else {
+      this.computeCartTotals();
+    }
+  }
+
+  remove(cartItem: CartItem): void {
+
+    const itemIndex = this.cartItems.findIndex(tempCartItem => tempCartItem.id === cartItem.id);
+
+    if (itemIndex > -1){
+      this.cartItems.splice(itemIndex, 1);
+      this.computeCartTotals();
+    }
   }
 }
